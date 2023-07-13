@@ -78,14 +78,16 @@ const Home = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-6">Recently added</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 p-6">
-        {books.map((book: IBook) => (
-          <BookCard book={book} key={book._id} />
-        ))}
+    <div>
+      <div className="flex flex-col items-center">
+        <h1 className="text-2xl font-bold mb-6">Recently added</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 p-6">
+          {books.map((book: IBook) => (
+            <BookCard book={book} key={book._id} />
+          ))}
+        </div>
       </div>
-      <Footer />
+        <Footer />
     </div>
   );
 };
