@@ -1,20 +1,46 @@
+import { useForm } from "react-hook-form";
 import { FiSend } from "react-icons/fi";
+import { useAddCommentMutation } from "../redux/features/book/book.api";
+import { useEffect } from "react";
 
 interface IProps {
   reviews: Array<string>;
+  id: string;
 }
-const BookReview = ({ reviews }: IProps) => {
+
+interface IComment {
+  comment: string;
+}
+
+const BookReview = ({ reviews, id }: IProps) => {
+  const { register, handleSubmit, reset } = useForm<IComment>();
+  const [addComment, { isLoading, isSuccess }] = useAddCommentMutation();
+
+  const onSubmit = (comment: IComment) => {
+    addComment({ id, comment });
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess, reset]);
 
   return (
     <div className="max-w-7xl mx-auto mt-5">
-      <form className="flex gap-5 items-center justify-center">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex gap-5 items-center justify-center"
+      >
         <textarea
           className="w-3/5 outline-none border-teal-500 border-2 rounded-full px-3"
           placeholder="Leave your review"
+          {...register("comment")}
         />
         <button
           type="submit"
           className="rounded-full h-10 w-10 p-2 text-[25px]"
+          disabled={isLoading}
         >
           <FiSend />
         </button>

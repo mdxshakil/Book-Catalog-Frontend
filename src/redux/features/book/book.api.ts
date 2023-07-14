@@ -40,6 +40,13 @@ const productApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    addComment: builder.mutation({
+      query: ({ id, comment }) => ({
+        url: `/book/comment/${id}`,
+        method: "POST",
+        body: comment,
+      }),
+    }),
   }),
 });
 
@@ -50,4 +57,5 @@ export const {
   useGetSingleBookQuery,
   useDeleteBookMutation,
   useEditBookMutation,
+  useAddCommentMutation,
 } = productApi;

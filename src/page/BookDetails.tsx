@@ -89,7 +89,7 @@ const BookDetails = () => {
             )}
           </div>
         </div>
-        <BookReview reviews={data?.data?.reviews} />
+        <BookReview reviews={data?.data?.reviews} id={data?.data?._id} />
       </>
     );
   }
