@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
 import addBook from "../assets/images/addnewbook.png";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useAppSelector } from "../redux/hooks";
 import { useForm } from "react-hook-form";
 import { useAddBookMutation } from "../redux/features/book/book.api";
 import { useEffect } from "react";
 import ErrorElement from "../components/ui/ErrorElement";
+import { toast } from "react-hot-toast";
 
 interface NewBookInputs {
   title: string;
@@ -19,19 +19,23 @@ const AddNewBook = () => {
   const { user } = useAppSelector((state) => state.auth);
   const [addNewBook, { isLoading, isError, error, isSuccess }] =
     useAddBookMutation();
-  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<NewBookInputs>();
 
   useEffect(() => {
     if (isSuccess) {
-      navigate("/all-books");
+      toast.success("Book added successfully!");
+      reset();
     }
-  }, [isSuccess, navigate]);
+    if (isError) {
+      toast.error("Failed to add book!");
+    }
+  }, [isSuccess, reset, isError]);
 
   const onSubmit = (data: NewBookInputs) => {
     const newBookData = { ...data, userEmail: user?.email };

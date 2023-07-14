@@ -5,6 +5,7 @@ import { setLoading, setUser } from "./redux/features/auth/authSlice";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./lib/firebase";
 import Spinner from "./components/Spinner";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -22,7 +23,16 @@ function App() {
     });
   }, [dispatch]);
 
-  return <>{isLoading ? <Spinner /> : <MainLayout />}</>;
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  return (
+    <>
+      <Toaster />
+      <MainLayout />
+    </>
+  );
 }
 
 export default App;
