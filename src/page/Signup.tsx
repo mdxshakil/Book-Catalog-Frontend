@@ -1,27 +1,53 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import signupimg from "../assets/images/signup.png";
+import { useForm } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { createUser } from "../redux/features/auth/authSlice";
+import ErrorElement from "../components/ui/ErrorElement";
+import { useEffect } from "react";
+
+interface SignupFormInputs {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 const Signup = () => {
+  const { user, isLoading, isError, error } = useAppSelector(
+    (state) => state.auth
+  );
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    reset,
+  } = useForm<SignupFormInputs>();
+
+  useEffect(() => {
+    if (isError) {
+      reset();
+    }
+    if (!isLoading && !isError && user.email) {
+      navigate("/")
+    }
+  }, [isError, reset, isLoading, user, navigate]);
+
+  const onSubmit = (data: SignupFormInputs) => {
+    const { confirmPassword, ...others } = data;
+    dispatch(createUser(others));
+  };
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       <div className="flex items-center justify-center">
-        <form className="w-full max-w-sm px-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full max-w-sm px-6"
+        >
           <h2 className="text-3xl font-bold mb-8">SignUp</h2>
-          {/* Name input */}
-          <div className="mb-4">
-            <label
-              htmlFor="name"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your name"
-            />
-          </div>
           {/* Email input */}
           <div className="mb-4">
             <label
@@ -35,7 +61,9 @@ const Signup = () => {
               id="email"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your email"
+              {...register("email", { required: "Email is required" })}
             />
+            {errors.email && <p>{errors.email.message}</p>}
           </div>
           {/* Password input */}
           <div className="mb-6">
@@ -50,7 +78,9 @@ const Signup = () => {
               id="password"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your password"
+              {...register("password", { required: "Password is required" })}
             />
+            {errors.password && <p>{errors.password.message}</p>}
           </div>
           {/* Confirm password input */}
           <div className="mb-6">
@@ -65,8 +95,18 @@ const Signup = () => {
               id="confirmPassword"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Re-Enter your password"
+              {...register("confirmPassword", {
+                required: "Confirm password is required",
+                validate: (val: string) => {
+                  if (watch("password") != val) {
+                    return "Your passwords do no match";
+                  }
+                },
+              })}
             />
+            {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
           </div>
+          {isError && error && <ErrorElement message={error} />}
           {/* Button */}
           <div className="flex items-center justify-between">
             <button

@@ -1,10 +1,49 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loginImg from "../assets/images/login.png";
+import ErrorElement from "../components/ui/ErrorElement";
+import { useForm } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { loginUser } from "../redux/features/auth/authSlice";
+import { useEffect } from "react";
+
+interface LoginFormInputs {
+  email: string;
+  password: string;
+}
+
 const Login = () => {
+  const { user, isLoading, isError, error } = useAppSelector(
+    (state) => state.auth
+  );
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<LoginFormInputs>();
+
+  useEffect(() => {
+    if (isError) {
+      reset();
+    }
+    if (!isLoading && !isError && user.email) {
+      navigate("/");
+    }
+  }, [isError, reset, isLoading, user, navigate]);
+
+  const onSubmit = (data: LoginFormInputs) => {
+    dispatch(loginUser(data));
+  };
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       <div className="flex items-center justify-center">
-        <form className="w-full max-w-sm px-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full max-w-sm px-6"
+        >
           <h2 className="text-3xl font-bold mb-8">Login</h2>
           {/* Email input */}
           <div className="mb-4">
@@ -19,7 +58,9 @@ const Login = () => {
               id="email"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your email"
+              {...register("email", { required: "Email is required" })}
             />
+            {errors.email && <p>{errors.email.message}</p>}
           </div>
           {/* Password input */}
           <div className="mb-6">
@@ -34,15 +75,19 @@ const Login = () => {
               id="password"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your password"
+              {...register("password", { required: "Password is required" })}
             />
+            {errors.password && <p>{errors.password.message}</p>}
           </div>
+          {isError && error && <ErrorElement message={error} />}
           {/* Button */}
           <div className="flex items-center justify-between">
             <button
               type="submit"
+              disabled={isLoading}
               className="bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600"
             >
-              Login
+              {isLoading ? "Loading..." : "Login"}
             </button>
             <Link to={"/"}>
               <span className="text-blue-500 cursor-pointer font-medium">

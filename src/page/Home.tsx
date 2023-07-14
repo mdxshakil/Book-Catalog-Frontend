@@ -3,6 +3,14 @@ import Footer from "../layout/Footer";
 import { IBook } from "../types/globalTypes";
 
 const Home = () => {
+
+  const accessToken = document.cookie
+  .split("; ")
+  .find((cookie) => cookie.startsWith("accessToken="))
+  ?.split("=")[1];
+
+console.log(accessToken);
+
   // ! dummy data
   const books = [
     {

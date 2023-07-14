@@ -1,9 +1,21 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/images/header-logo.png";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { signOut } from "firebase/auth";
+import { auth } from "../lib/firebase";
+import { setUser } from "../redux/features/auth/authSlice";
 
 const Header = () => {
   const linkStyles =
     "text-green-500 hover:text-green-700 transition-all ease-in-out";
+
+  const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      dispatch(setUser(null));
+    });
+  };
   return (
     <nav className="w-full h-16 fixed top backdrop-blur-lg z-10">
       <div className="h-full w-full bg-white/60">
@@ -40,11 +52,19 @@ const Header = () => {
                   <a className={linkStyles}>Reading List</a>
                 </Link>
               </li>
-              <li>
-                <Link to="/login">
-                  <a className={linkStyles}>Login</a>
-                </Link>
-              </li>
+              {!user?.email ? (
+                <li>
+                  <Link to="/login">
+                    <a className={linkStyles}>Login</a>
+                  </Link>
+                </li>
+              ) : (
+                <li>
+                  <button className={linkStyles} onClick={handleLogout}>
+                    Logout
+                  </button>
+                </li>
+              )}
               <li className="ml-5">
                 <a className={linkStyles}>profile</a>
               </li>
