@@ -11,6 +11,7 @@ import { FaEdit } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import { toast } from "react-hot-toast";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -19,7 +20,21 @@ const BookDetails = () => {
   const navigate = useNavigate();
 
   const handleDeleteBook = () => {
-    deleteBook(id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteBook(id);
+        navigate("/");
+        Swal.fire("Deleted!", "The book has been deleted.", "success");
+      }
+    });
   };
 
   useEffect(() => {
