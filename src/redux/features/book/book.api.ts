@@ -21,6 +21,12 @@ const productApi = api.injectEndpoints({
         method: "GET",
       }),
     }),
+    getSingleBook: builder.query({
+      query: (id) => ({
+        url: `/book/${id}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -28,4 +34,5 @@ export const {
   useAddBookMutation,
   useGetLatestBooksQuery,
   useGetAllBooksQuery,
+  useGetSingleBookQuery,
 } = productApi;
