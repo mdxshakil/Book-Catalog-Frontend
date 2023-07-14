@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { IBook } from "../types/globalTypes";
+import moment from "moment";
 
 interface IProps {
   book: IBook;
@@ -31,7 +32,7 @@ const BookCard = ({ book }: IProps) => {
           </h4>
 
           <div className="mt-1 text-gray-600">{book.author}</div>
-          <div className="mt-1 text-gray-600">{book.publicationDate}</div>
+          <div className="mt-1 text-gray-600">{moment(book.publicationDate).format('ll')}</div>
           <div className="mt-4">
             <span className="text-md bg-teal-200 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
               {book.genre}

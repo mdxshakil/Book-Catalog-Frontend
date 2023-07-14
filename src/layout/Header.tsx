@@ -65,9 +65,6 @@ const Header = () => {
                   </button>
                 </li>
               )}
-              <li className="ml-5">
-                <a className={linkStyles}>profile</a>
-              </li>
             </ul>
           </div>
         </div>
