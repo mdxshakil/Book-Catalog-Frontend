@@ -15,7 +15,17 @@ const productApi = api.injectEndpoints({
         method: "GET",
       }),
     }),
+    getAllBooks: builder.query({
+      query: () => ({
+        url: "/book/all-books",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useAddBookMutation, useGetLatestBooksQuery } = productApi;
+export const {
+  useAddBookMutation,
+  useGetLatestBooksQuery,
+  useGetAllBooksQuery,
+} = productApi;
