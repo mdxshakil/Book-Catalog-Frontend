@@ -12,13 +12,14 @@ const Home = () => {
     isError,
     error,
   } = useGetLatestBooksQuery(undefined);
+  
 
   let content = null;
   if (isLoading) {
     content = <Spinner />;
   } else if (!isLoading && isError && error) {
-    content = <ErrorElement message={error as string} />;
-  } else if (!isLoading && !isError && books.data.lenght === 0) {
+    content = <ErrorElement message="Failed to load books" />;
+  } else if (!isLoading && !isError && !books?.data?.length) {
     content = <p>No books available</p>;
   } else {
     content = (

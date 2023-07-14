@@ -32,9 +32,15 @@ const Signup = () => {
       reset();
     }
     if (!isLoading && !isError && user.email) {
-      navigate("/")
+      navigate("/");
     }
   }, [isError, reset, isLoading, user, navigate]);
+
+  useEffect(() => {
+    if (user) {
+      navigate(-1);
+    }
+  }, [navigate, user]);
 
   const onSubmit = (data: SignupFormInputs) => {
     const { confirmPassword, ...others } = data;
@@ -106,7 +112,7 @@ const Signup = () => {
             />
             {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
           </div>
-          {isError && error && <ErrorElement message={error} />}
+          {isError && error && <ErrorElement message="Signup failed" />}
           {/* Button */}
           <div className="flex items-center justify-between">
             <button

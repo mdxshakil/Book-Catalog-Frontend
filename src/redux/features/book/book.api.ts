@@ -27,6 +27,12 @@ const productApi = api.injectEndpoints({
         method: "GET",
       }),
     }),
+    deleteBook: builder.mutation({
+      query: (id) => ({
+        url: `/book/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -35,4 +41,5 @@ export const {
   useGetLatestBooksQuery,
   useGetAllBooksQuery,
   useGetSingleBookQuery,
+  useDeleteBookMutation,
 } = productApi;

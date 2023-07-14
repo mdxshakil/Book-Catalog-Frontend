@@ -17,8 +17,8 @@ const AllBooks = () => {
   if (isLoading) {
     content = <Spinner />;
   } else if (!isLoading && isError && error) {
-    content = <ErrorElement message={error as string} />;
-  } else if (!isLoading && !isError && books.data.lenght === 0) {
+    content = <ErrorElement message="Failed to laod books" />;
+  } else if (!isLoading && !isError && !books?.data?.length) {
     content = <p>No books available</p>;
   } else {
     content = (

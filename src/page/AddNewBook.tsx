@@ -17,8 +17,7 @@ interface NewBookInputs {
 
 const AddNewBook = () => {
   const { user } = useAppSelector((state) => state.auth);
-  const [addNewBook, { isLoading, isError, error, isSuccess }] =
-    useAddBookMutation();
+  const [addNewBook, { isLoading, isError, isSuccess }] = useAddBookMutation();
 
   const {
     register,
@@ -47,7 +46,7 @@ const AddNewBook = () => {
       <div className="hidden md:block">
         <img
           src={addBook}
-          alt="Login Image"
+          alt="Add New Book"
           className="h-full w-full object-cover md:object-contain"
         />
       </div>
@@ -63,7 +62,7 @@ const AddNewBook = () => {
               htmlFor="author"
               className="block text-gray-700 text-sm font-medium mb-2"
             >
-              Author
+              Author<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -80,7 +79,7 @@ const AddNewBook = () => {
               htmlFor="genre"
               className="block text-gray-700 text-sm font-medium mb-2"
             >
-              Genre
+              Genre<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -97,7 +96,7 @@ const AddNewBook = () => {
               htmlFor="title"
               className="block text-gray-700 text-sm font-medium mb-2"
             >
-              Title
+              Title<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -121,7 +120,7 @@ const AddNewBook = () => {
               id="image"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter title"
-              {...register("image", { required: "Image is required" })}
+              {...register("image")}
             />
             {errors.image && <p>{errors.image.message}</p>}
           </div>
@@ -131,7 +130,7 @@ const AddNewBook = () => {
               htmlFor="publicationDate"
               className="block text-gray-700 text-sm font-medium mb-2"
             >
-              Publication Date
+              Publication Date<span className="text-red-500">*</span>
             </label>
             <input
               type="date"
@@ -142,7 +141,6 @@ const AddNewBook = () => {
             />
             {errors.publicationDate && <p>{errors.publicationDate.message}</p>}
           </div>
-          {isError && error && <ErrorElement message={error as string} />}
           <button
             type="submit"
             disabled={isLoading}

@@ -39,6 +39,7 @@ const Login = () => {
   const onSubmit = (data: LoginFormInputs) => {
     dispatch(loginUser(data));
   };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen">
       <div className="flex items-center justify-center">
@@ -81,7 +82,7 @@ const Login = () => {
             />
             {errors.password && <p>{errors.password.message}</p>}
           </div>
-          {isError && error && <ErrorElement message={error} />}
+          {isError && error && <ErrorElement message="Failed to login" />}
           {/* Button */}
           <div className="flex items-center justify-between">
             <button
