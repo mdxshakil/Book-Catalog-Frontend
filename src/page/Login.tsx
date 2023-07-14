@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginImg from "../assets/images/login.png";
 import ErrorElement from "../components/ui/ErrorElement";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,8 @@ const Login = () => {
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location?.state?.from?.pathname || "/";
 
   const {
     register,
@@ -29,10 +31,10 @@ const Login = () => {
     if (isError) {
       reset();
     }
-    if (!isLoading && !isError && user.email) {
-      navigate("/");
+    if (user.email && !isLoading) {
+      navigate(from, { replace: true });
     }
-  }, [isError, reset, isLoading, user, navigate]);
+  }, [isError, reset, isLoading, user, navigate, from]);
 
   const onSubmit = (data: LoginFormInputs) => {
     dispatch(loginUser(data));
