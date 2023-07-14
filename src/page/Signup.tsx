@@ -36,12 +36,6 @@ const Signup = () => {
     }
   }, [isError, reset, isLoading, user, navigate]);
 
-  useEffect(() => {
-    if (user) {
-      navigate(-1);
-    }
-  }, [navigate, user]);
-
   const onSubmit = (data: SignupFormInputs) => {
     const { confirmPassword, ...others } = data;
     dispatch(createUser(others));

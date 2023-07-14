@@ -13,12 +13,14 @@ import { toast } from "react-hot-toast";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
 import placeHolder from "../assets/images/placeholder.jpg";
+import { useAppSelector } from "../redux/hooks";
 
 const BookDetails = () => {
   const { id } = useParams();
   const { data, isLoading, isError, error } = useGetSingleBookQuery(id);
   const [deleteBook, { isSuccess }] = useDeleteBookMutation();
   const navigate = useNavigate();
+  const { user } = useAppSelector((state) => state.auth);
 
   const handleDeleteBook = () => {
     Swal.fire({
@@ -67,19 +69,24 @@ const BookDetails = () => {
             <p>{moment(data?.data?.publicationDate).format("ll")}</p>
             <button>Add to wishlist</button>
             <button>Add to readinglist</button>
-            <div className="flex items-center gap-4">
-              <button className="flex items-center gap-3 bg-green-400 px-2 rounded-full text-white hover:bg-green-500">
-                Edit
-                <FaEdit />
-              </button>
-              <button
-                className="flex items-center gap-3 bg-red-400 px-2 rounded-full text-white hover:bg-red-500"
-                onClick={handleDeleteBook}
-              >
-                Delete
-                <AiFillDelete />
-              </button>
-            </div>
+            {user?.email === data?.data?.userEmail && (
+              <div className="flex items-center gap-4">
+                <button
+                  className="flex items-center gap-3 bg-green-400 px-2 rounded-full text-white hover:bg-green-500"
+                  onClick={() => navigate(`/edit-book/${data?.data?._id}`)}
+                >
+                  Edit
+                  <FaEdit />
+                </button>
+                <button
+                  className="flex items-center gap-3 bg-red-400 px-2 rounded-full text-white hover:bg-red-500"
+                  onClick={handleDeleteBook}
+                >
+                  Delete
+                  <AiFillDelete />
+                </button>
+              </div>
+            )}
           </div>
         </div>
         <BookReview reviews={data?.data?.reviews} />
