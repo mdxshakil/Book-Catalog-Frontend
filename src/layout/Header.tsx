@@ -7,7 +7,7 @@ import { setUser } from "../redux/features/auth/authSlice";
 
 const Header = () => {
   const linkStyles =
-    "text-green-500 hover:text-green-700 transition-all ease-in-out";
+    "text-gray-500 hover:text-gray-900 transition-all ease-in-out";
 
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();

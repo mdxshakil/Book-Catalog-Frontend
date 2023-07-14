@@ -8,30 +8,35 @@ const productApi = api.injectEndpoints({
         method: "POST",
         body: bookData,
       }),
+      invalidatesTags: ["books"],
     }),
     getLatestBooks: builder.query({
       query: () => ({
         url: "/book/latest-books",
         method: "GET",
       }),
+      providesTags: ["books"],
     }),
     getAllBooks: builder.query({
       query: () => ({
         url: "/book/all-books",
         method: "GET",
       }),
+      providesTags: ["books"],
     }),
     getSingleBook: builder.query({
       query: (id) => ({
         url: `/book/${id}`,
         method: "GET",
       }),
+      providesTags: ["book"],
     }),
     deleteBook: builder.mutation({
       query: (id) => ({
         url: `/book/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["books"],
     }),
     editBook: builder.mutation({
       query: ({ id, data }) => ({
@@ -39,6 +44,7 @@ const productApi = api.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
+      invalidatesTags: ["books", "book"],
     }),
     addComment: builder.mutation({
       query: ({ id, comment }) => ({
@@ -46,6 +52,7 @@ const productApi = api.injectEndpoints({
         method: "POST",
         body: comment,
       }),
+      invalidatesTags: ["book"],
     }),
   }),
 });
