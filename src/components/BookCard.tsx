@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { IBook } from "../types/globalTypes";
 
 interface IProps {
@@ -5,8 +6,13 @@ interface IProps {
 }
 
 const BookCard = ({ book }: IProps) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="hover:scale-110 transition duration-200 cursor-pointer">
+    <div
+      className="hover:scale-110 transition duration-200 cursor-pointer"
+      onClick={() => navigate(`/book-details/${book._id!}`)}
+    >
       <img
         src="https://source.unsplash.com/random/350x350"
         alt=" random imgee"

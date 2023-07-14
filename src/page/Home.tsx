@@ -80,7 +80,11 @@ const Home = () => {
   return (
     <div>
       <div className="flex flex-col items-center">
-        <h1 className="text-2xl font-bold mb-6">Recently added</h1>
+      <h1 className="text-2xl font-bold mb-8 text-blue-900">
+          <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
+            Recently Added Books
+          </span>
+        </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 p-6">
           {books.map((book: IBook) => (
             <BookCard book={book} key={book._id} />

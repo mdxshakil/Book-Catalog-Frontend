@@ -10,14 +10,14 @@ const Signup = () => {
           {/* Name input */}
           <div className="mb-4">
             <label
-              htmlFor="email"
+              htmlFor="name"
               className="block text-gray-700 font-medium mb-2"
             >
               Name
             </label>
             <input
-              type="email"
-              id="email"
+              type="text"
+              id="name"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your name"
             />
@@ -31,7 +31,7 @@ const Signup = () => {
               Email
             </label>
             <input
-              type="email"
+              type="text"
               id="email"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your email"

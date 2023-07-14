@@ -84,7 +84,6 @@ const AllBooks = () => {
           {books.map((book: IBook) => (
             <BookCard book={book} key={book._id} />
           ))}
-          S
         </div>
       </div>
     </div>

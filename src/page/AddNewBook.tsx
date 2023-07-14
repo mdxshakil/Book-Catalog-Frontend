@@ -3,6 +3,14 @@ import addBook from "../assets/images/addnewbook.png";
 const AddNewBook = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 h-screen">
+      {/* side image */}
+      <div className="hidden md:block">
+        <img
+          src={addBook}
+          alt="Login Image"
+          className="h-full w-full object-cover md:object-contain"
+        />
+      </div>
       <div className="flex items-center justify-center">
         <form className="w-full max-w-lg px-6">
           <h2 className="text-3xl font-bold mb-8">Add new book</h2>
@@ -69,14 +77,6 @@ const AddNewBook = () => {
             Add Book
           </button>
         </form>
-      </div>
-      {/* side image */}
-      <div className="hidden md:block">
-        <img
-          src={addBook}
-          alt="Login Image"
-          className="h-full w-full object-cover md:object-contain"
-        />
       </div>
     </div>
   );
