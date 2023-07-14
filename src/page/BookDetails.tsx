@@ -12,6 +12,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { toast } from "react-hot-toast";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
+import placeHolder from "../assets/images/placeholder.jpg";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -54,7 +55,10 @@ const BookDetails = () => {
       <>
         <div className="flex max-w-7xl mx-auto items-center border-b border-gray-300">
           <div className="w-[50%]">
-            <img src="https://source.unsplash.com/random/350x350" alt="" />
+            <img
+              src={data?.data?.image ? data.data.image : placeHolder}
+              alt=""
+            />
           </div>
           <div className="w-[50%] space-y-3">
             <h1 className="text-3xl font-semibold">{data?.data?.title}</h1>
