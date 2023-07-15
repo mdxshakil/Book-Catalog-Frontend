@@ -5,18 +5,30 @@ import { useGetAllBooksQuery } from "../redux/features/book/book.api";
 import { IBook } from "../types/globalTypes";
 import { FaSearch } from "react-icons/fa";
 import { useState } from "react";
+import { bookGenres } from "../constants";
 
 const AllBooks = () => {
-  const {
-    data: books,
-    isLoading,
-    isError,
-    error,
-  } = useGetAllBooksQuery(undefined);
+  const { data: books, isLoading, isError, error } = useGetAllBooksQuery(undefined);
   const [searchText, setSearchText] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
+  };
+
+  const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedGenre(event.target.value);
+  };
+
+  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedYear(event.target.value);
+  };
+
+  const handleClearFilters = () => {
+    setSearchText("");
+    setSelectedGenre("");
+    setSelectedYear("");
   };
 
   let searchedBooks = [...(books?.data ?? [])];
@@ -32,22 +44,27 @@ const AllBooks = () => {
     });
   }
 
-  let content = null;
-  if (isLoading) {
-    content = <Spinner />;
-  } else if (!isLoading && isError && error) {
-    content = <ErrorElement message="Failed to laod books" />;
-  } else if (!isLoading && !isError && !searchedBooks.length) {
-    content = <p>No books available</p>;
-  } else {
-    content = (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-12 p-6">
-        {searchedBooks?.map((book: IBook) => (
-          <BookCard book={book} key={book._id} />
-        ))}
-      </div>
-    );
+  if (selectedGenre) {
+    searchedBooks = searchedBooks.filter((book: IBook) => {
+      const { genre } = book;
+      return genre.toLowerCase() === selectedGenre.toLowerCase();
+    });
   }
+
+  if (selectedYear) {
+    searchedBooks = searchedBooks.filter((book: IBook) => {
+      const publicationYear = new Date(book.publicationDate).getFullYear().toString();
+      return publicationYear === selectedYear;
+    });
+  }
+
+  // Generate year options for the year selection dropdown
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: currentYear - 1700 + 1 }, (_, index) => (
+    <option key={index} value={currentYear - index}>
+      {currentYear - index}
+    </option>
+  ));
 
   return (
     <div>
@@ -63,10 +80,59 @@ const AllBooks = () => {
             <FaSearch />
           </div>
         </div>
-        {content}
+        <div className="flex items-center gap-3">
+          <label htmlFor="genre" className="text-gray-700 font-medium">
+            Genre:
+          </label>
+          <select
+            id="genre"
+            className="border-2 rounded-md px-4 py-2 outline-none"
+            value={selectedGenre}
+            onChange={handleGenreChange}
+          >
+            <option value="">All Genres</option>
+            {bookGenres.map((genre) => (
+              <option key={genre} value={genre}>
+                {genre}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="year" className="text-gray-700 font-medium">
+            Publication Year:
+          </label>
+          <select
+            id="year"
+            className="border-2 rounded-md px-4 py-2 outline-none"
+            value={selectedYear}
+            onChange={handleYearChange}
+          >
+            <option value="">All Years</option>
+            {yearOptions}
+          </select>
+          <button
+            className="bg-red-500 text-white rounded-md py-2 px-4 hover:bg-red-600"
+            onClick={handleClearFilters}
+          >
+            Clear Filters
+          </button>
+        </div>
+        {isLoading ? (
+          <Spinner />
+        ) : isError && error ? (
+          <ErrorElement message="Failed to load books" />
+        ) : !searchedBooks.length ? (
+          <p>No books available</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-12 p-6">
+            {searchedBooks.map((book: IBook) => (
+              <BookCard book={book} key={book._id} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default AllBooks;
+

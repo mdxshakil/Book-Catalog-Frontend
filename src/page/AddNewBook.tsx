@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useAddBookMutation } from "../redux/features/book/book.api";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { bookGenres, currentDate, minDate } from "../constants";
 
 interface NewBookInputs {
   title: string;
@@ -39,6 +40,7 @@ const AddNewBook = () => {
     const newBookData = { ...data, userEmail: user?.email };
     addNewBook(newBookData);
   };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 h-screen">
       {/* side image */}
@@ -80,13 +82,18 @@ const AddNewBook = () => {
             >
               Genre<span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
+            <select
               id="genre"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter genre"
               {...register("genre", { required: "Genre is required" })}
-            />
+            >
+              <option value="">Select a genre</option>
+              {bookGenres.map((genre) => (
+                <option key={genre} value={genre}>
+                  {genre}
+                </option>
+              ))}
+            </select>
             {errors.genre && <p>{errors.genre.message}</p>}
           </div>
           {/* title */}
@@ -136,6 +143,8 @@ const AddNewBook = () => {
               id="publicationDate"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter publication date"
+              max={currentDate}
+              min={minDate}
               {...register("publicationDate", { required: "Date is required" })}
             />
             {errors.publicationDate && <p>{errors.publicationDate.message}</p>}

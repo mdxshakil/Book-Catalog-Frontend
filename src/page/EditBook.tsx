@@ -6,6 +6,8 @@ import {
 } from "../redux/features/book/book.api";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { bookGenres, currentDate, minDate } from "../constants";
 
 interface NewBookInputs {
   title: string;
@@ -31,9 +33,9 @@ const EditBook = () => {
   const formattedPublicationDate = publicationDate
     ? new Date(publicationDate).toISOString().split("T")[0]
     : "";
-  const [editBook] = useEditBookMutation();
+  const [editBook, { isSuccess, isLoading, isError }] = useEditBookMutation();
 
-  // Add default values to  the form
+  // Add default values to the form
   useEffect(() => {
     reset({
       author,
@@ -55,6 +57,15 @@ const EditBook = () => {
   const onSubmit = (data: NewBookInputs) => {
     editBook({ id: _id, data });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Edit successful");
+    }
+    if (isError) {
+      toast.error("An error occured");
+    }
+  }, [isError, isSuccess]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 h-screen">
@@ -97,13 +108,22 @@ const EditBook = () => {
             >
               Genre<span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
+            <select
               id="genre"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter genre"
               {...register("genre", { required: "Genre is required" })}
-            />
+            >
+              <option value="">Select a genre</option>
+              {bookGenres.map((genre) => (
+                <option
+                  key={genre}
+                  value={genre}
+                  selected={genre === genre} // set the selected option
+                >
+                  {genre}
+                </option>
+              ))}
+            </select>
             {errors.genre && <p>{errors.genre.message}</p>}
           </div>
           {/* title */}
@@ -153,6 +173,8 @@ const EditBook = () => {
               id="publicationDate"
               className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter publication date"
+              max={currentDate}
+              min={minDate}
               {...register("publicationDate", { required: "Date is required" })}
             />
             {errors.publicationDate && <p>{errors.publicationDate.message}</p>}
@@ -160,6 +182,7 @@ const EditBook = () => {
           <button
             type="submit"
             className="bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600"
+            disabled={isLoading}
           >
             Edit Book
           </button>
