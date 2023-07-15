@@ -6,12 +6,21 @@ import { IBook } from "../types/globalTypes";
 import { FaSearch } from "react-icons/fa";
 import { useState } from "react";
 import { bookGenres } from "../constants";
+import { useAppSelector } from "../redux/hooks";
+import { useNavigate } from "react-router-dom";
 
 const AllBooks = () => {
-  const { data: books, isLoading, isError, error } = useGetAllBooksQuery(undefined);
+  const {
+    data: books,
+    isLoading,
+    isError,
+    error,
+  } = useGetAllBooksQuery(undefined);
   const [searchText, setSearchText] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
+  const { user } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
@@ -53,18 +62,23 @@ const AllBooks = () => {
 
   if (selectedYear) {
     searchedBooks = searchedBooks.filter((book: IBook) => {
-      const publicationYear = new Date(book.publicationDate).getFullYear().toString();
+      const publicationYear = new Date(book.publicationDate)
+        .getFullYear()
+        .toString();
       return publicationYear === selectedYear;
     });
   }
 
   // Generate year options for the year selection dropdown
   const currentYear = new Date().getFullYear();
-  const yearOptions = Array.from({ length: currentYear - 1700 + 1 }, (_, index) => (
-    <option key={index} value={currentYear - index}>
-      {currentYear - index}
-    </option>
-  ));
+  const yearOptions = Array.from(
+    { length: currentYear - 1700 + 1 },
+    (_, index) => (
+      <option key={index} value={currentYear - index}>
+        {currentYear - index}
+      </option>
+    )
+  );
 
   return (
     <div>
@@ -86,7 +100,7 @@ const AllBooks = () => {
           </label>
           <select
             id="genre"
-            className="border-2 rounded-md px-4 py-2 outline-none"
+            className="border-2 rounded-full px-4 py-1 outline-none"
             value={selectedGenre}
             onChange={handleGenreChange}
           >
@@ -102,7 +116,7 @@ const AllBooks = () => {
           </label>
           <select
             id="year"
-            className="border-2 rounded-md px-4 py-2 outline-none"
+            className="border-2 rounded-full px-4 py-1 outline-none"
             value={selectedYear}
             onChange={handleYearChange}
           >
@@ -110,12 +124,20 @@ const AllBooks = () => {
             {yearOptions}
           </select>
           <button
-            className="bg-red-500 text-white rounded-md py-2 px-4 hover:bg-red-600"
+            className="bg-red-500 text-white rounded-full py-1 px-4 hover:bg-red-600"
             onClick={handleClearFilters}
           >
             Clear Filters
           </button>
         </div>
+        {user?.email && (
+          <button
+            className="bg-blue-400 px-2 text-white rounded-full py-1 hover:bg-blue-500"
+            onClick={() => navigate("/add-new-book")}
+          >
+            Add New Book
+          </button>
+        )}
         {isLoading ? (
           <Spinner />
         ) : isError && error ? (
@@ -135,4 +157,3 @@ const AllBooks = () => {
 };
 
 export default AllBooks;
-

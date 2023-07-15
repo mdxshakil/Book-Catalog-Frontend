@@ -1,7 +1,7 @@
 const WishList = () => {
   return (
     <div>
-      
+      skagdaskhgdk
     </div>
   );
 };
