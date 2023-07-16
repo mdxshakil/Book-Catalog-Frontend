@@ -16,6 +16,8 @@ import placeHolder from "../assets/images/placeholder.jpg";
 import { useAppSelector } from "../redux/hooks";
 import { FcReading } from "react-icons/fc";
 import { BiSolidCartAdd } from "react-icons/bi";
+import { useAddToWishlistMutation } from "../redux/features/wishlist/wishlist.api";
+import { useAddToReadingListMutation } from "../redux/features/readinglist/readinglist.api";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -23,6 +25,34 @@ const BookDetails = () => {
   const [deleteBook, { isSuccess }] = useDeleteBookMutation();
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
+  const [
+    addToWishlist,
+    { isLoading: wishLoading, isError: wishError, isSuccess: wishSuccess },
+  ] = useAddToWishlistMutation();
+  const [
+    addToReadingList,
+    { isLoading: readLoading, isError: readError, isSuccess: readSuccess },
+  ] = useAddToReadingListMutation();
+
+  const handleAddToWishlist = () => {
+    addToWishlist({
+      userEmail: user?.email,
+      book: {
+        bookId: id,
+        title: data?.data?.title,
+        quantity: 1,
+        image: data?.data?.image,
+      },
+    });
+  };
+
+  const handleAddToReadingList = () => {
+    addToReadingList({
+      userEmail: user?.email,
+      book: id,
+      hasRead: false,
+    });
+  };
 
   const handleDeleteBook = () => {
     Swal.fire({
@@ -47,7 +77,22 @@ const BookDetails = () => {
       toast.success("Book deleted successfully");
       navigate("/");
     }
-  }, [isSuccess, navigate]);
+    if (wishSuccess) {
+      toast.success("Added to wishlist");
+    }
+    if (wishError) {
+      toast.error("Failed to add to wishlist");
+    }
+  }, [isSuccess, navigate, wishSuccess, wishError]);
+  
+  useEffect(() => {
+    if (readSuccess) {
+      toast.success("Added to reading list");
+    }
+    if (readError) {
+      toast.error("Failed to add to reading list");
+    }
+  }, [readError, readSuccess]);
 
   let content = null;
   if (isLoading) {
@@ -72,18 +117,20 @@ const BookDetails = () => {
                   {data?.data?.title}
                 </h2>
                 {/* wishlist and reading list buttons */}
-                {user?.email === data?.data?.userEmail && (
+                {user?.email && (
                   <div className="flex items-center gap-4">
                     <button
                       className="flex items-center gap-3 border-[1px] border-black rounded-full px-2 hover:bg-black hover:text-white transition duration-200"
-                      onClick={() => navigate(`/edit-book/${data?.data?._id}`)}
+                      onClick={handleAddToWishlist}
+                      disabled={wishLoading}
                     >
                       Wishlist
                       <BiSolidCartAdd />
                     </button>
                     <button
                       className="flex items-center gap-3 border-[1px] border-black rounded-full px-2 hover:bg-black hover:text-white transition duration-200"
-                      onClick={handleDeleteBook}
+                      onClick={handleAddToReadingList}
+                      disabled={readLoading}
                     >
                       ReadingList
                       <FcReading />
@@ -105,7 +152,7 @@ const BookDetails = () => {
                   <h2 className="text-sm tracking-tighter text-gray-900">
                     <p>By: {data?.data?.author}</p>
                     <span className="text-gray-600">
-                      At: {moment(data?.data?.publicationDate).format("LL")}
+                      At: {moment(data?.data?.publicationDate).format("ll")}
                     </span>
                   </h2>
                 </div>

@@ -34,7 +34,7 @@ const BookCard = ({ book }: IProps) => {
               #{book?.genre}
             </span>
             <span className="mr-2">
-              Published on: {moment(book?.publicationDate).format("LL")}
+              Published on: {moment(book?.publicationDate).format("ll")}
             </span>
             <span>By: {book?.author}</span>
           </div>
