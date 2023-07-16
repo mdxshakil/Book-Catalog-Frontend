@@ -78,18 +78,20 @@ const BookCard = ({ book }: IProps) => {
           </div>
           <div className="flex items-center justify-between text-sm text-gray-500">
             <span>By: {book?.author}</span>
-            <div className="flex items-center justify-between gap-3">
-              {!wishListItem?.data?.book?._id ||
-              wishListItem?.data?.book?._id !== book?._id ? (
-                <button onClick={handleAddToWishList} disabled={wishLoading}>
-                  <AiOutlineHeart className="h-5 w-5 text-red-400" />
-                </button>
-              ) : (
-                <button disabled>
-                  <AiFillHeart className="h-5 w-5 text-red-300" />
-                </button>
-              )}
-            </div>
+            {user?.email && (
+              <div className="flex items-center justify-between gap-3">
+                {!wishListItem?.data?.book?._id ||
+                wishListItem?.data?.book?._id !== book?._id ? (
+                  <button onClick={handleAddToWishList} disabled={wishLoading}>
+                    <AiOutlineHeart className="h-5 w-5 text-red-400" />
+                  </button>
+                ) : (
+                  <button disabled>
+                    <AiFillHeart className="h-5 w-5 text-red-300" />
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
