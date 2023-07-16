@@ -4,4 +4,4 @@
  - [Frontend Repository](https://github.com/mdxshakil/Book-Catalog-Frontend)
 
  - [Backend Live Link](https://a5-book-catalog-backend.vercel.app/)
- - [Backend Live Link](https://github.com/mdxshakil/book-catalog-backend)
+ - [Backend Repository](https://github.com/mdxshakil/book-catalog-backend)
