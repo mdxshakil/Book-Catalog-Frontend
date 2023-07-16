@@ -48,9 +48,9 @@ const Header = () => {
             <span key={index} className="md:ml-8 md:my-0 my-7 font-semibold">
               <li>
                 <Link to={`${link.link}`}>
-                  <a className="text-gray-800 hover:text-blue-400 duration-500">
+                  <p className="text-gray-800 hover:text-blue-400 duration-500">
                     {link.name}
-                  </a>
+                  </p>
                 </Link>
               </li>
             </span>

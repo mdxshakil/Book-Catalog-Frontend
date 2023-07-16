@@ -132,7 +132,7 @@ const Signup = () => {
       <div className="hidden md:block">
         <img
           src={signupimg}
-          alt="Login Image"
+          alt="Signup Image"
           className="h-full w-full object-cover"
         />
       </div>

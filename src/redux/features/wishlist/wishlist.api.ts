@@ -8,7 +8,7 @@ const wishlistApi = api.injectEndpoints({
         method: "POST",
         body: wishlistData,
       }),
-      invalidatesTags: ["wishlist"],
+      invalidatesTags: ["wishlist", "books", "singleWishListItem"],
     }),
     getWishlist: builder.query({
       query: (userEmail) => ({
@@ -22,7 +22,7 @@ const wishlistApi = api.injectEndpoints({
         url: `/wishlist/${itemId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["wishlist"],
+      invalidatesTags: ["wishlist", "books", "singleWishListItem"],
     }),
     updateQuantity: builder.mutation({
       query: ({ itemId, action }) => ({
@@ -32,6 +32,13 @@ const wishlistApi = api.injectEndpoints({
       }),
       invalidatesTags: ["wishlist"],
     }),
+    getSingleWishlistItem: builder.query({
+      query: ({ userEmail, bookId }) => ({
+        url: `/wishlist/${bookId}?email=${userEmail}`,
+        method: "GET",
+      }),
+      providesTags: ["singleWishListItem"],
+    }),
   }),
 });
 
@@ -39,5 +46,6 @@ export const {
   useAddToWishlistMutation,
   useGetWishlistQuery,
   useRemoveFromWishlistMutation,
-  useUpdateQuantityMutation
+  useUpdateQuantityMutation,
+  useGetSingleWishlistItemQuery,
 } = wishlistApi;

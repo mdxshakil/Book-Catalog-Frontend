@@ -73,7 +73,7 @@ const EditBook = () => {
       <div className="hidden md:block">
         <img
           src={editBookImage}
-          alt="Add New Book"
+          alt="Edit Book"
           className="h-full w-full object-cover md:object-contain"
         />
       </div>

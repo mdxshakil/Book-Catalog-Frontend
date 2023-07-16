@@ -44,7 +44,7 @@ const productApi = api.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["books", "book"],
+      invalidatesTags: ["books", "book", "readingList", "wishlist"],
     }),
     addComment: builder.mutation({
       query: ({ id, comment }) => ({

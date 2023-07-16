@@ -37,12 +37,8 @@ const BookDetails = () => {
   const handleAddToWishlist = () => {
     addToWishlist({
       userEmail: user?.email,
-      book: {
-        bookId: id,
-        title: data?.data?.title,
-        quantity: 1,
-        image: data?.data?.image,
-      },
+      book: id,
+      quantity: 1,
     });
   };
 
@@ -81,16 +77,16 @@ const BookDetails = () => {
       toast.success("Added to wishlist");
     }
     if (wishError) {
-      toast.error("Failed to add to wishlist");
+      toast.error("Already in wishlist or internal server error");
     }
   }, [isSuccess, navigate, wishSuccess, wishError]);
-  
+
   useEffect(() => {
     if (readSuccess) {
       toast.success("Added to reading list");
     }
     if (readError) {
-      toast.error("Failed to add to reading list");
+      toast.error("Already in reading list or internal server error");
     }
   }, [readError, readSuccess]);
 

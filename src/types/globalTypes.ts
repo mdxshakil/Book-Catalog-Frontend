@@ -10,12 +10,8 @@ export interface IBook {
 export interface IWishlistItem {
   _id?: string;
   userEmail: string;
-  book: {
-    bookId: string;
-    image?: string;
-    quantity: number;
-    title: string;
-  };
+  book: IBook;
+  quantity: number;
 }
 
 export interface IReadingListItem {
